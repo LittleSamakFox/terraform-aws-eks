@@ -134,6 +134,15 @@ resource "aws_security_group_rule" "k5s_sg_cluster_outbound" {
     protocol = "tcp"
     description = "Allow Cluster API Server to communicate with the worker nodes"   
 }
+resource "aws_security_group_rule" "k5s_sg_cluster_bastion" { //바스티온 통신 추가
+    security_group_id = aws_security_group.k5s_sg_cluster.id
+    source_security_group_id = aws_security_group.k5s_sg_bastion.id
+    type = "ingress"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    description = "Allow bastion nodes to communicate with the cluster API Server"   
+}
 
 #노드그룹 보안 그룹 생성
 resource "aws_security_group" "k5s_sg_nodes" {
