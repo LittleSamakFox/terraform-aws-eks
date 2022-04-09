@@ -17,7 +17,7 @@ resource "aws_eks_node_group"  "k5s_nodes" {
     
     remote_access {
       source_security_group_ids = [aws_security_group.k5s_sg_bastion.id]
-      ec2ec2_ssh_key = aws_key_pair.k5s_key.key_name
+      ec2_ssh_key = aws_key_pair.k5s_key.key_name
     }
 
     depends_on = [
