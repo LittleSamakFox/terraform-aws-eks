@@ -18,7 +18,7 @@ resource "aws_subnet" "k5s_public_subnet" {
     vpc_id = aws_vpc.k5s_vpc.id
     cidr_block = var.aws_vpc_public_subnets[count.index]
     availability_zone = var.aws_azs[count.index]
-    map_public_ip_on_launch = true //EKS node group에 자동으로 퍼블릭 IP 할당
+    map_public_ip_on_launch = true //EKS node group에 워커노드가 생성되는 즉시 자동으로 eip 할당
     tags = tomap({
     "Name"                                      = "${var.aws_default_name}-PUBLIC${count.index+1}",
     "kubernetes.io/cluster/${var.aws_default_name}-cluster" = "shared",
