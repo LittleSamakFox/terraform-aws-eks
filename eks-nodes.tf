@@ -6,7 +6,7 @@ resource "aws_eks_node_group"  "k5s_nodes" {
 
     ami_type = "AL2_x86_64"
     capacity_type = "ON_DEMAND"
-    instance_types = ["t3.micro"]
+    instance_types = ["t3.medium"]
     disk_size = 20
 
     scaling_config {
