@@ -5,7 +5,7 @@ resource "aws_vpc" "k5s_vpc" {
     enable_dns_support   = true
     tags = tomap({
     "Name"                                      = "${var.aws_default_name}-VPC",
-    "kubernetes.io/cluster/${var.aws_default_name}-cluster" = "shared",
+    "kubernetes.io/cluster/${var.aws_default_name}-CLUSTER" = "shared",
   })
 }
 
@@ -21,7 +21,7 @@ resource "aws_subnet" "k5s_public_subnet" {
     map_public_ip_on_launch = true //EKS node group에 워커노드가 생성되는 즉시 자동으로 eip 할당
     tags = tomap({
     "Name"                                      = "${var.aws_default_name}-PUBLIC${count.index+1}",
-    "kubernetes.io/cluster/${var.aws_default_name}-cluster" = "shared",
+    "kubernetes.io/cluster/${var.aws_default_name}-CLUSTER" = "shared",
     "kubernetes.io/role/elb" = 1
   })
 }
@@ -33,7 +33,7 @@ resource "aws_subnet" "k5s_private_subnet" {
     availability_zone = var.aws_azs[count.index]
     tags = tomap({
     "Name"                                      = "${var.aws_default_name}-PRIVATE${count.index+1}",
-    "kubernetes.io/cluster/${var.aws_default_name}-cluster" = "shared",
+    "kubernetes.io/cluster/${var.aws_default_name}-CLUSTER" = "shared",
     "kubernetes.io/role/internal-elb" = 1
   })
 }
