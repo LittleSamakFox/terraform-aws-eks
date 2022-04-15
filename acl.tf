@@ -1,3 +1,4 @@
+/*
 #VPC Default ACL
 resource "aws_default_network_acl" "k5s_vpc_acl_default" {
   default_network_acl_id = aws_vpc.k5s_vpc.default_network_acl_id
@@ -167,3 +168,4 @@ resource "aws_network_acl" "k5s_acl_private" {
       rule_no = 2
     }
 }
+*/
