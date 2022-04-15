@@ -1,3 +1,4 @@
+/*
 #IAM 유저 생성
 resource "aws_iam_user" "k5s_user1" {
   name = "eevvee"
@@ -38,6 +39,7 @@ resource "aws_iam_user_policy" "k5s_iam_user_policy" {
 }
 EOF
 }
+*/
 
 
 #EKS Cluster IAM Role 생성
