@@ -25,6 +25,6 @@ resource "aws_eks_node_group"  "k5s_nodes" {
         aws_iam_role_policy_attachment.k5s_iam_cluster_AmazonEKS_CNI_Policy,
         aws_iam_role_policy_attachment.k5s_iam_cluster_AmazonEC2ContainerRegistryReadOnly]
     tags = {
-      "Name" = "${var.aws_default_name}-nodes"
+      "Name" = "${var.aws_default_name}-NODES"
     }
 }

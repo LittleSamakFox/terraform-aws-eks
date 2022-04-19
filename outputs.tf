@@ -11,12 +11,19 @@ output "bastion_ip" {
   description = "bastion ec2 EIP, u can access it ssh -i ~/.ssh/[PRIVATE_KEY이름].pem ec2-user@[public ip주소]"
 }
 
+output "rds_endpoint" {
+  value = aws_db_instance.k5s_rds.endpoint
+  description = "RDS Endpoint"
+}
+
 /*
 output "cluster_ca_certificate" {
   value = aws_eks_cluster.k5s_cluster.certificate_authority[0].data
 }
 */
 
+/*
 output "cluster_arn" {
   value = aws_eks_cluster.k5s_cluster.arn
 }
+*/

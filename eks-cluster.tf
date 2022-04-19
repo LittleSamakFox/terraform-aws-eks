@@ -3,7 +3,7 @@ resource "aws_eks_cluster"  "k5s_cluster" {
     role_arn = aws_iam_role.k5s_iam_cluster.arn
     version = "1.21"
 
-    enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+    //enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
     vpc_config{
         security_group_ids = [aws_security_group.k5s_sg_cluster.id, aws_security_group.k5s_sg_nodes.id]
@@ -16,6 +16,6 @@ resource "aws_eks_cluster"  "k5s_cluster" {
         aws_iam_role_policy_attachment.k5s_iam_cluster_AmazonEKSClusterPolicy,
         aws_iam_role_policy_attachment.k5s_iam_cluster_AmazonEKSVPCResourceControllery]
     tags = {
-      "Name" = "${var.aws_default_name}-cluster"
+      "Name" = "${var.aws_default_name}-CLUSTER"
     }
 }

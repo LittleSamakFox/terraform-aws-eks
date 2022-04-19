@@ -56,6 +56,35 @@ resource "aws_security_group" "k5s_sg_bastion" {
     }
 }
 
+#RDS 보안 그룹 설정
+resource "aws_security_group" "k5s_sg_RDS" {
+    vpc_id = aws_vpc.k5s_vpc.id
+    name = "${var.aws_default_name}-SG-RDS"
+    description = "Security group for RDS instance"
+    tags = {
+      "Name" = "${var.aws_default_name}-RDS-SG"
+    }
+}
+resource "aws_security_group_rule" "k5s_sg_RDS_inbound" {
+    security_group_id = aws_security_group.k5s_sg_RDS.id
+    source_security_group_id = aws_security_group.k5s_sg_bastion.id
+    type = "ingress"
+    from_port = 3306
+    to_port = 3306
+    protocol = "TCP"
+    description = "Allow communicate with RDS"   
+}
+resource "aws_security_group_rule" "k5s_sg_RDS_outbound" {
+    security_group_id = aws_security_group.k5s_sg_RDS.id
+    source_security_group_id = aws_security_group.k5s_sg_bastion.id
+    type = "egress"
+    from_port = 3306
+    to_port = 3306
+    protocol = "TCP"
+    description = "Allow communicate with RDS"   
+}
+
+
 #컨트롤플레인 보안그룹 생성
 resource "aws_security_group" "k5s_sg_controlplane" {
     vpc_id = aws_vpc.k5s_vpc.id
@@ -87,13 +116,13 @@ resource "aws_security_group" "k5s_sg_dataplane" {
         from_port = 0
         to_port = 0
         protocol = "-1"
-        cidr_blocks = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
+        cidr_blocks = ["0.0.0.0/0"]//["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
     }
     ingress { //Allow worker Kubelets and pods to receive communication from the cluster control plane
         from_port = 1025
         to_port = 65535
         protocol = "tcp"
-        cidr_blocks =  ["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
+        cidr_blocks =  ["0.0.0.0/0"]//["10.0.10.0/24", "10.0.11.0/24", "10.0.12.0/24"]
     }
     egress {
         from_port = 0
