@@ -11,8 +11,25 @@ output "bastion_ip" {
   description = "bastion ec2 EIP, u can access it ssh -i ~/.ssh/[PRIVATE_KEY이름].pem ec2-user@[public ip주소]"
 }
 
-output "rds_endpoint" {
-  value = aws_db_instance.k5s_rds.endpoint
+output "jenkins_ip" {
+  value = aws_eip.k5s_jenkins_eip.public_ip
+  description = "jenkins ec2 EIP, u can access it ssh -i ~/.ssh/[PRIVATE_KEY이름].pem ec2-user@[public ip주소]"
+}
+
+output "rds_user_endpoint" {
+  value = aws_db_instance.k5s_rds_user.endpoint
+  description = "RDS Endpoint"
+}
+output "rds_auth_endpoint" {
+  value = aws_db_instance.k5s_rds_auth.endpoint
+  description = "RDS Endpoint"
+}
+output "rds_movie_endpoint" {
+  value = aws_db_instance.k5s_rds_movie.endpoint
+  description = "RDS Endpoint"
+}
+output "rds_review_endpoint" {
+  value = aws_db_instance.k5s_rds_review.endpoint
   description = "RDS Endpoint"
 }
 

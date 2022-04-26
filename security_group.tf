@@ -56,6 +56,66 @@ resource "aws_security_group" "k5s_sg_bastion" {
     }
 }
 
+#Jenkins 보안 그룹 설정
+resource "aws_security_group" "k5s_sg_jenkins" {
+    vpc_id = aws_vpc.k5s_vpc.id
+    name = "${var.aws_default_name}-SG-JENKINS"
+    description = "Security group for jenkins instance"
+    ingress { //SSH
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+    ingress { //HTTP
+        from_port = 80
+        to_port = 80
+        protocol = "tcp"
+        cidr_blocks =  ["0.0.0.0/0"]
+    }
+    ingress { //HTTPS
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks =  ["0.0.0.0/0"]
+    }
+    ingress { //Dashboard
+        from_port = 8080
+        to_port = 8080
+        protocol = "tcp"
+        cidr_blocks =  ["0.0.0.0/0"]
+    }
+    ingress { //Dashboard
+        from_port = 9090
+        to_port = 9090
+        protocol = "tcp"
+        cidr_blocks =  ["0.0.0.0/0"]
+    }
+    ingress { //RDS
+        from_port = 3306
+        to_port = 3306
+        protocol = "tcp"
+        cidr_blocks =  ["0.0.0.0/0"]
+    }
+    ingress { //ICMP
+        from_port = -1
+        to_port = -1
+        protocol = "icmp"
+        cidr_blocks =  ["0.0.0.0/0"]
+    }
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+      "Name" = "${var.aws_default_name}-JENKINS-SG"
+    }
+}
+
+
 #RDS 보안 그룹 설정
 resource "aws_security_group" "k5s_sg_RDS" {
     vpc_id = aws_vpc.k5s_vpc.id
@@ -67,7 +127,7 @@ resource "aws_security_group" "k5s_sg_RDS" {
 }
 resource "aws_security_group_rule" "k5s_sg_RDS_inbound" {
     security_group_id = aws_security_group.k5s_sg_RDS.id
-    source_security_group_id = aws_security_group.k5s_sg_bastion.id
+    source_security_group_id = aws_security_group.k5s_sg_jenkins.id
     type = "ingress"
     from_port = 3306
     to_port = 3306
@@ -76,7 +136,7 @@ resource "aws_security_group_rule" "k5s_sg_RDS_inbound" {
 }
 resource "aws_security_group_rule" "k5s_sg_RDS_outbound" {
     security_group_id = aws_security_group.k5s_sg_RDS.id
-    source_security_group_id = aws_security_group.k5s_sg_bastion.id
+    source_security_group_id = aws_security_group.k5s_sg_jenkins.id
     type = "egress"
     from_port = 3306
     to_port = 3306
@@ -119,6 +179,15 @@ resource "aws_security_group_rule" "k5s_sg_cluster_bastion" { //바스티온 통
     to_port = 443
     protocol = "tcp"
     description = "Allow bastion nodes to communicate with the cluster API Server"   
+}
+resource "aws_security_group_rule" "k5s_sg_cluster_jenkins" { //젠킨슨 통신 추가
+    security_group_id = aws_security_group.k5s_sg_controlplane.id
+    source_security_group_id = aws_security_group.k5s_sg_jenkins.id
+    type = "ingress"
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    description = "Allow jenkins nodes to communicate with the cluster API Server"   
 }
 
 #노드그룹 보안 그룹 생성
